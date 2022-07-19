@@ -27,19 +27,22 @@ app.get("/", (req, res) => {
 
 app.get("/daang/:symbol/:action", async (req, res) => {
   console.log(req.params);
-  const { symbol, action } = req.params;
+  // const { symbol, action } = req.params;
+  const symbol = "enj";
+  const action = "price";
 
   try {
     const apiResponse = await fetch(apiURL + "search?query=" + symbol);
     const json = await apiResponse.json();
 
-    const selectedToken = json.coins
-      .filter(
-        (token) => token.symbol.toUpperCase() === (symbol || "").toUpperCase()
-      )
-      .pop();
+    const selectedTokenArray = json.coins.filter(
+      (token) => token.symbol.toUpperCase() === (symbol || "").toUpperCase()
+    );
+
+    const selectedToken = selectedTokenArray[0];
 
     const id = selectedToken.id;
+    console.log(id, selectedToken);
 
     const info = await getInfo(id);
 
